@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 48px;
+        }
+
+        table {
+            background: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            border: 2px solid black;
+            border-collapse: collapse;
+            transform: translate(-50%, -50%);
+        }
+
+        table>tbody>tr>td {
+            border: 2px solid black;
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        table>tbody>tr>td:hover {
+            background: lightgray;
+        }
+        table>tbody>tr>td:active {
+            background: skyblue;
+        }
+
+        .occupied {
+            pointer-events: none;
+        }
+
+        .game-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 24pt;
+            margin: 20px 0 10px 0;
+            user-select: none;
+        }
+
+        .current-player {
+            text-align: center;
+            font-weight: bold;
+            font-size: 16pt;
+            margin: 10px 0 10px 0;
+            color: red;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body onload="load()">
+    <p class="game-title">
+        Tic-Tac-Toe
+    </p>
+    <p class="current-player" id="currentPlayer">
+
+    </p>
+    <table>
+        <tbody>
+            <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+            </tr>
+            <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+            </tr>
+            <tr>
+                <td class="cell"></td>
+                <td class="cell"></td>
+                <td class="cell"></td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        // globals
+        var currentPlayer = 'X';
+        var winner = "";
+        var playerIndicator = document.getElementById("currentPlayer");
+        var cells = document.getElementsByClassName("cell");
+
+        var xLoc = [];
+        var oLoc = [];
+
+        function load() {
+            playerIndicator.innerHTML = "Click any cell to start!";
+            let index = 0;
+            for (cell of cells) {
+                cell.onclick = fillCell;
+                cell.setAttribute("index", index++);
+            }
+        }
+
+        function fillCell(e) {
+            let cell = e.target;
+            let whoPlayed = currentPlayer;
+            let index = Number(cell.getAttribute("index"));
+            cell.innerHTML = currentPlayer;
+            cell.classList.add("occupied");
+            if (whoPlayed == 'X') {
+                xLoc.push(index);
+            } else {
+                oLoc.push(index);
+            }
+            togglePlayer();
+            playerIndicator.innerHTML = `${currentPlayer}'s Turn`;
+            findWinner(cell);
+        }
+
+        function togglePlayer() {
+            switch (currentPlayer) {
+                case 'X':
+                    currentPlayer = 'O';
+                    break;
+                case 'O':
+                    currentPlayer = 'X';
+                    break;
+            }
+        }
+
+        function findWinner(playedCell) {
+            // who played just now:
+            let whoPlayed = playedCell.innerHTML;
+            let location = Number(playedCell.getAttribute("index"));
+            console.log(whoPlayed, "just played at", location);
+
+            // logic:
+
+            // check if X is the winner:
+
+            // left diagonal:
+            if (xLoc.includes(0) && xLoc.includes(4) && xLoc.includes(8)) {
+                winner = 'X';
+            }
+            // right diagonal:
+            if (xLoc.includes(2) && xLoc.includes(4) && xLoc.includes(6)) {
+                winner = 'X';
+            }
+            // center vertical:
+            if (xLoc.includes(1) && xLoc.includes(4) && xLoc.includes(7)) {
+                winner = 'X';
+            }
+            // center horizontal:
+            if (xLoc.includes(3) && xLoc.includes(4) && xLoc.includes(5)) {
+                winner = 'X';
+            }
+            // top horizontal:
+            if (xLoc.includes(0) && xLoc.includes(1) && xLoc.includes(2)) {
+                winner = 'X';
+            }
+            // bottom horizontal:
+            if (xLoc.includes(6) && xLoc.includes(7) && xLoc.includes(8)) {
+                winner = 'X';
+            }
+            // left vertical:
+            if (xLoc.includes(0) && xLoc.includes(3) && xLoc.includes(6)) {
+                winner = 'X';
+            }
+            // right vertical
+            if (xLoc.includes(2) && xLoc.includes(5) && xLoc.includes(8)) {
+                winner = 'X';
+            }
+
+            // check if O is the winner
+            // left diagonal:
+            if (oLoc.includes(0) && oLoc.includes(4) && oLoc.includes(8)) {
+                winner = 'O';
+            }
+            // right diagonal:
+            if (oLoc.includes(2) && oLoc.includes(4) && oLoc.includes(6)) {
+                winner = 'O';
+            }
+            // center vertical:
+            if (oLoc.includes(1) && oLoc.includes(4) && oLoc.includes(7)) {
+                winner = 'O';
+            }
+            // center horizontal:
+            if (oLoc.includes(3) && oLoc.includes(4) && oLoc.includes(5)) {
+                winner = 'O';
+            }
+            // top horizontal:
+            if (oLoc.includes(0) && oLoc.includes(1) && oLoc.includes(2)) {
+                winner = 'O';
+            }
+            // bottom horizontal:
+            if (oLoc.includes(6) && oLoc.includes(7) && oLoc.includes(8)) {
+                winner = 'O';
+            }
+            // left vertical:
+            if (oLoc.includes(0) && oLoc.includes(3) && oLoc.includes(6)) {
+                winner = 'O';
+            }
+            // right vertical
+            if (oLoc.includes(2) && oLoc.includes(5) && oLoc.includes(8)) {
+                winner = 'O';
+            }
+
+            if (winner === "") {
+                // find if all cells are filled:
+                let allFilled = true;
+                for (cell of cells) {
+                    if (cell.innerHTML === "") {
+                        allFilled = false;
+                        break;
+                    }
+                }
+
+                // check if allFilled is true:
+                if (allFilled === true) {
+                    playerIndicator.innerHTML = "Game Over: No Winner";
+                    return;
+                }
+            } else {
+                playerIndicator.innerHTML = `${winner} is the winner!`;
+                for (cell of cells) {
+                    cell.style.pointerEvents = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
